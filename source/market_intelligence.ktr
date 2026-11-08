@@ -430,7 +430,7 @@
     <created_date>2026/06/19 21:02:27.809</created_date>
     <modified_user>-</modified_user>
     <modified_date>2026/06/19 21:02:27.809</modified_date>
-    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -442,8 +442,8 @@
     <access>Native</access>
     <database>market_intelligence</database>
     <port>5432</port>
-    <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7f2e4bb16bd64d980aac9</password>
+    <username>antonio_dev</username>
+    <password>Encrypted 2be98afc86ac69c90a417a77fe196aacc</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -488,33 +488,13 @@
   </connection>
   <order>
     <hop>
-      <from>transfers</from>
-      <to>select market values for players in season</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>transfermarkt_players</from>
       <to>select player and position</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>select market values for players in season</from>
-      <to>sort by player id</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>select player and position</from>
       <to>sort by player id 2</to>
-      <enabled>N</enabled>
-    </hop>
-    <hop>
-      <from>sort by player id</from>
-      <to>Merge join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>sort by player id 2</from>
-      <to>Merge join</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -538,11 +518,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Merge join</from>
-      <to>Filter rows by transfer_season</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Stream lookup</from>
       <to>Filter rows</to>
       <enabled>Y</enabled>
@@ -557,7 +532,407 @@
       <to>Sort rows</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>sort by player id 2</from>
+      <to>Filter rows by league</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter rows by league</from>
+      <to>Filter rows by transfer_season</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter rows</from>
+      <to>build_full_name</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort rows</from>
+      <to>Unique rows</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>build_full_name</from>
+      <to>sorty by player name</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>sorty by player name</from>
+      <to>Merge join</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique rows</from>
+      <to>Merge join</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Merge join</from>
+      <to>Clean data</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Clean data</from>
+      <to>the moneyball target task</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>calculate xA</from>
+      <to>high-perform free agents</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Clean data</from>
+      <to>remove 0 assits</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>remove 0 assits</from>
+      <to>calculate xA</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Clean data</from>
+      <to>Table output</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>calculate xA</from>
+      <to>Table output 2</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <step>
+    <name>Clean data</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>player_id</name>
+        <rename/>
+      </field>
+      <field>
+        <name>first_name</name>
+        <rename/>
+      </field>
+      <field>
+        <name>full_name</name>
+        <rename/>
+      </field>
+      <field>
+        <name>position</name>
+        <rename/>
+      </field>
+      <field>
+        <name>city_of_birth</name>
+        <rename/>
+      </field>
+      <field>
+        <name>country_of_birth</name>
+        <rename/>
+      </field>
+      <field>
+        <name>date_of_birth</name>
+        <rename/>
+      </field>
+      <field>
+        <name>market_value_in_eur</name>
+        <rename/>
+      </field>
+      <field>
+        <name>median_value</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Rk</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Nation</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Pos</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Squad</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Comp</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Age</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Born</name>
+        <rename/>
+      </field>
+      <field>
+        <name>contract_expiration_date</name>
+        <rename/>
+      </field>
+      <field>
+        <name>MP</name>
+        <rename/>
+      </field>
+      <field>
+        <name>90s</name>
+        <rename>full_90s</rename>
+      </field>
+      <field>
+        <name>G+A-PK</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Ast</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Gls</name>
+        <rename/>
+      </field>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>Rk</name>
+      </remove>
+      <remove>
+        <name>Age</name>
+      </remove>
+      <remove>
+        <name>player_id</name>
+      </remove>
+      <remove>
+        <name>city_of_birth</name>
+      </remove>
+      <remove>
+        <name>Comp</name>
+      </remove>
+      <meta>
+        <name>date_of_birth</name>
+        <rename>date_of_birth</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>dd/MM/yyyy</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>90s</name>
+        <rename>90s</rename>
+        <type>Number</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>Ast</name>
+        <rename>Ast</rename>
+        <type>Number</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>768</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to/>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>market_value_in_eur</leftvalue>
+        <function>&lt;</function>
+        <rightvalue>median_value</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter rows by league</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to/>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>current_club_domestic_competition_id</leftvalue>
+            <function>=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>IT1</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>OR</operator>
+            <leftvalue>current_club_domestic_competition_id</leftvalue>
+            <function>=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>FR1</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>OR</operator>
+            <leftvalue>current_club_domestic_competition_id</leftvalue>
+            <function>=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>GR1</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>OR</operator>
+            <leftvalue>current_club_domestic_competition_id</leftvalue>
+            <function>=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>GB1</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>OR</operator>
+            <leftvalue>current_club_domestic_competition_id</leftvalue>
+            <function>=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>ES1</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>352</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Filter rows by transfer_season</name>
     <type>FilterRows</type>
@@ -577,23 +952,37 @@
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>transfer_season</leftvalue>
+            <leftvalue>last_season</leftvalue>
             <function>=</function>
             <rightvalue/>
             <value>
               <name>constant</name>
-              <type>String</type>
-              <text>25/26</text>
+              <type>Integer</type>
+              <text>2025</text>
               <length>-1</length>
-              <precision>-1</precision>
+              <precision>0</precision>
               <isnull>N</isnull>
-              <mask/>
+              <mask>#</mask>
             </value>
           </condition>
           <condition>
             <negated>N</negated>
             <operator>AND</operator>
             <leftvalue>market_value_in_eur</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>first_name</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>last_name</leftvalue>
             <function>IS NOT NULL</function>
             <rightvalue/>
           </condition>
@@ -609,8 +998,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>288</xloc>
-      <yloc>272</yloc>
+      <xloc>160</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -618,7 +1007,7 @@
     <name>Merge join</name>
     <type>MergeJoin</type>
     <description/>
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -626,13 +1015,13 @@
       <schema_name/>
     </partitioning>
     <join_type>INNER</join_type>
-    <step1>sort by player id</step1>
-    <step2>sort by player id 2</step2>
+    <step1>sorty by player name</step1>
+    <step2>Unique rows</step2>
     <keys_1>
-      <key>player_id</key>
+      <key>full_name</key>
     </keys_1>
     <keys_2>
-      <key>player_id</key>
+      <key>Player</key>
     </keys_2>
     <attributes/>
     <cluster_schema/>
@@ -643,8 +1032,50 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>272</yloc>
+      <xloc>624</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sort rows</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>Player</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -685,8 +1116,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>384</xloc>
-      <yloc>368</yloc>
+      <xloc>160</xloc>
+      <yloc>544</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -703,9 +1134,9 @@
     </partitioning>
     <connection>postgres</connection>
     <schema>public</schema>
-    <table>market_values</table>
+    <table>the_moneyball_target</table>
     <commit>1000</commit>
-    <truncate>N</truncate>
+    <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -720,28 +1151,72 @@
     <return_field/>
     <fields>
       <field>
-        <column_name>player_id</column_name>
-        <stream_name>player_id</stream_name>
+        <column_name>first_name</column_name>
+        <stream_name>first_name</stream_name>
       </field>
       <field>
-        <column_name>transfer_season</column_name>
-        <stream_name>transfer_season</stream_name>
+        <column_name>full_name</column_name>
+        <stream_name>full_name</stream_name>
+      </field>
+      <field>
+        <column_name>position</column_name>
+        <stream_name>position</stream_name>
+      </field>
+      <field>
+        <column_name>country_of_birth</column_name>
+        <stream_name>country_of_birth</stream_name>
+      </field>
+      <field>
+        <column_name>date_of_birth</column_name>
+        <stream_name>date_of_birth</stream_name>
       </field>
       <field>
         <column_name>market_value_in_eur</column_name>
         <stream_name>market_value_in_eur</stream_name>
       </field>
       <field>
-        <column_name>first_name</column_name>
-        <stream_name>first_name</stream_name>
+        <column_name>median_value</column_name>
+        <stream_name>median_value</stream_name>
       </field>
       <field>
-        <column_name>last_name</column_name>
-        <stream_name>last_name</stream_name>
+        <column_name>Nation</column_name>
+        <stream_name>Nation</stream_name>
       </field>
       <field>
-        <column_name>position</column_name>
-        <stream_name>position</stream_name>
+        <column_name>Pos</column_name>
+        <stream_name>Pos</stream_name>
+      </field>
+      <field>
+        <column_name>Squad</column_name>
+        <stream_name>Squad</stream_name>
+      </field>
+      <field>
+        <column_name>Born</column_name>
+        <stream_name>Born</stream_name>
+      </field>
+      <field>
+        <column_name>contract_expiration_date</column_name>
+        <stream_name>contract_expiration_date</stream_name>
+      </field>
+      <field>
+        <column_name>MP</column_name>
+        <stream_name>MP</stream_name>
+      </field>
+      <field>
+        <column_name>90s</column_name>
+        <stream_name>90s</stream_name>
+      </field>
+      <field>
+        <column_name>G+A-PK</column_name>
+        <stream_name>G+A-PK</stream_name>
+      </field>
+      <field>
+        <column_name>Ast</column_name>
+        <stream_name>Ast</stream_name>
+      </field>
+      <field>
+        <column_name>Gls</column_name>
+        <stream_name>Gls</stream_name>
       </field>
     </fields>
     <attributes/>
@@ -753,8 +1228,333 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>688</xloc>
-      <yloc>32</yloc>
+      <xloc>768</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>postgres</connection>
+    <schema>public</schema>
+    <table>high-perform free agents</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>first_name</column_name>
+        <stream_name>first_name</stream_name>
+      </field>
+      <field>
+        <column_name>full_name</column_name>
+        <stream_name>full_name</stream_name>
+      </field>
+      <field>
+        <column_name>position</column_name>
+        <stream_name>position</stream_name>
+      </field>
+      <field>
+        <column_name>country_of_birth</column_name>
+        <stream_name>country_of_birth</stream_name>
+      </field>
+      <field>
+        <column_name>date_of_birth</column_name>
+        <stream_name>date_of_birth</stream_name>
+      </field>
+      <field>
+        <column_name>market_value_in_eur</column_name>
+        <stream_name>market_value_in_eur</stream_name>
+      </field>
+      <field>
+        <column_name>median_value</column_name>
+        <stream_name>median_value</stream_name>
+      </field>
+      <field>
+        <column_name>Nation</column_name>
+        <stream_name>Nation</stream_name>
+      </field>
+      <field>
+        <column_name>Pos</column_name>
+        <stream_name>Pos</stream_name>
+      </field>
+      <field>
+        <column_name>Squad</column_name>
+        <stream_name>Squad</stream_name>
+      </field>
+      <field>
+        <column_name>Born</column_name>
+        <stream_name>Born</stream_name>
+      </field>
+      <field>
+        <column_name>contract_expiration_date</column_name>
+        <stream_name>contract_expiration_date</stream_name>
+      </field>
+      <field>
+        <column_name>MP</column_name>
+        <stream_name>MP</stream_name>
+      </field>
+      <field>
+        <column_name>full_90s</column_name>
+        <stream_name>full_90s</stream_name>
+      </field>
+      <field>
+        <column_name>G+A-PK</column_name>
+        <stream_name>G+A-PK</stream_name>
+      </field>
+      <field>
+        <column_name>Ast</column_name>
+        <stream_name>Ast</stream_name>
+      </field>
+      <field>
+        <column_name>Gls</column_name>
+        <stream_name>Gls</stream_name>
+      </field>
+      <field>
+        <column_name>xA</column_name>
+        <stream_name>xA</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>864</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Unique rows</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <count_rows>N</count_rows>
+    <count_field/>
+    <reject_duplicate_row>N</reject_duplicate_row>
+    <error_description/>
+    <fields>
+      <field>
+        <name>Player</name>
+        <case_insensitive>Y</case_insensitive>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>448</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>build_full_name</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>//Script qua
+var full_name = first_name + ' ' + last_name;
+
+</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>full_name</name>
+        <rename>full_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>calculate xA</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <failIfNoFile>Y</failIfNoFile>
+    <calculation>
+      <field_name>xA</field_name>
+      <calc_type>DIVIDE</calc_type>
+      <field_a>Ast</field_a>
+      <field_b>90s</field_b>
+      <field_c/>
+      <value_type>Number</value_type>
+      <value_length>4</value_length>
+      <value_precision>2</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>768</xloc>
+      <yloc>864</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>high-perform free agents</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to/>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>xA</leftvalue>
+            <function>&gt;=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>Number</type>
+              <text>0.3</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask>####0.0#########;-####0.0#########</mask>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <conditions>
+              <condition>
+                <negated>N</negated>
+                <leftvalue>contract_expiration_date</leftvalue>
+                <function>=</function>
+                <rightvalue/>
+                <value>
+                  <name>constant</name>
+                  <type>Date</type>
+                  <text>2026/06/30 00:00:00.000</text>
+                  <length>-1</length>
+                  <precision>-1</precision>
+                  <isnull>N</isnull>
+                  <mask>dd/MM/yyyy</mask>
+                </value>
+              </condition>
+              <condition>
+                <negated>N</negated>
+                <operator>OR</operator>
+                <leftvalue>contract_expiration_date</leftvalue>
+                <function>=</function>
+                <rightvalue/>
+                <value>
+                  <name>constant</name>
+                  <type>Date</type>
+                  <text>2027/06/30 00:00:00.000</text>
+                  <length>-1</length>
+                  <precision>-1</precision>
+                  <isnull>N</isnull>
+                  <mask>dd/MM/yyyy</mask>
+                </value>
+              </condition>
+            </conditions>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>912</xloc>
+      <yloc>864</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -799,764 +1599,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>select market values for players in season</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <rename/>
-      </field>
-      <field>
-        <name>transfer_season</name>
-        <rename/>
-      </field>
-      <field>
-        <name>market_value_in_eur</name>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
-      <meta>
-        <name>market_value_in_eur</name>
-        <rename>market_value_in_eur</rename>
-        <type>Number</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type>normal</storage_type>
-      </meta>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>96</xloc>
-      <yloc>128</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>select player and position</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <rename/>
-      </field>
-      <field>
-        <name>first_name</name>
-        <rename/>
-      </field>
-      <field>
-        <name>last_name</name>
-        <rename/>
-      </field>
-      <field>
-        <name>position</name>
-        <rename/>
-      </field>
-      <field>
-        <name>last_season</name>
-        <rename/>
-      </field>
-      <field>
-        <name>city_of_birth</name>
-        <rename/>
-      </field>
-      <field>
-        <name>country_of_birth</name>
-        <rename/>
-      </field>
-      <field>
-        <name>date_of_birth</name>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>272</xloc>
-      <yloc>128</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sort by player id</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory/>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>96</xloc>
-      <yloc>208</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sort by player id 2</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory/>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>272</xloc>
-      <yloc>208</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sorty by position</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory/>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>position</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>384</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>transfermarkt_players</name>
-    <type>CsvInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <filename>/home/giusvale/information_integration_project/datasources/Transfermarkt/players.csv</filename>
-    <filename_field/>
-    <rownum_field/>
-    <include_filename>N</include_filename>
-    <separator>,</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <lazy_conversion>Y</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <format>mixed</format>
-    <encoding/>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>first_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>10</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>last_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>14</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>21</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>last_season</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>current_club_id</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>player_code</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>21</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>country_of_birth</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>18</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>city_of_birth</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>25</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>country_of_citizenship</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>date_of_birth</name>
-        <type>Date</type>
-        <format>yyyy-MM-dd HH:mm:ss</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>sub_position</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>18</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>position</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>10</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>foot</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>5</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>height_in_cm</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>contract_expiration_date</name>
-        <type>Date</type>
-        <format>yyyy-MM-dd HH:mm:ss</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>agent_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>20</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>image_url</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>88</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>international_caps</name>
-        <type>Boolean</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>international_goals</name>
-        <type>Boolean</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>current_national_team_id</name>
-        <type>Boolean</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>url</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>72</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>current_club_domestic_competition_id</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>4</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>current_club_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>65</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>market_value_in_eur</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>highest_market_value_in_eur</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>272</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>transfers</name>
-    <type>CsvInput</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <filename>/home/giusvale/information_integration_project/datasources/Transfermarkt/transfers.csv</filename>
-    <filename_field/>
-    <rownum_field/>
-    <include_filename>N</include_filename>
-    <separator>,</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <lazy_conversion>N</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <format>mixed</format>
-    <encoding/>
-    <fields>
-      <field>
-        <name>player_id</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>transfer_date</name>
-        <type>Date</type>
-        <format>yyyy-MM-dd</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>transfer_season</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>5</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>from_club_id</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>to_club_id</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>from_club_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>to_club_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>15</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>transfer_fee</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>€</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>market_value_in_eur</name>
-        <type>Number</type>
-        <format>#.#</format>
-        <currency>€</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>15</length>
-        <precision>0</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>player_name</name>
-        <type>String</type>
-        <format/>
-        <currency>€</currency>
-        <decimal>,</decimal>
-        <group>.</group>
-        <length>22</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>96</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter rows</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to/>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>market_value_in_eur</leftvalue>
-        <function>&lt;</function>
-        <rightvalue>median_value</rightvalue>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>464</xloc>
-      <yloc>368</yloc>
+      <xloc>400</xloc>
+      <yloc>544</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1571,7 +1615,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>/home/giusvale/information_integration_project/datasources/Football_Players_Stats_2025-2026/players_data-2025_2026.csv</filename>
+    <filename>/home/antonio_dev/projects/market_intelligence/datasources/Football_Players_Stats_2025-2026/players_data-2025_2026.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -2718,8 +2762,147 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>608</xloc>
-      <yloc>0</yloc>
+      <xloc>624</xloc>
+      <yloc>112</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>remove 0 assits</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to/>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>Ast</leftvalue>
+        <function>&lt;></function>
+        <rightvalue/>
+        <value>
+          <name>constant</name>
+          <type>Number</type>
+          <text>0.0</text>
+          <length>-1</length>
+          <precision>-1</precision>
+          <isnull>N</isnull>
+          <mask>####0.0#########;-####0.0#########</mask>
+        </value>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>768</xloc>
+      <yloc>768</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>select player and position</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>player_id</name>
+      </field>
+      <field>
+        <name>first_name</name>
+      </field>
+      <field>
+        <name>last_name</name>
+      </field>
+      <field>
+        <name>position</name>
+      </field>
+      <field>
+        <name>last_season</name>
+      </field>
+      <field>
+        <name>city_of_birth</name>
+      </field>
+      <field>
+        <name>country_of_birth</name>
+      </field>
+      <field>
+        <name>date_of_birth</name>
+      </field>
+      <field>
+        <name>market_value_in_eur</name>
+      </field>
+      <field>
+        <name>current_club_domestic_competition_id</name>
+      </field>
+      <field>
+        <name>contract_expiration_date</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>last_season</name>
+        <rename>last_season</rename>
+        <type>BigNumber</type>
+        <length>4</length>
+        <precision>0</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>contract_expiration_date</name>
+        <rename>contract_expiration_date</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>dd/MM/yyyy</conversion_mask>
+        <date_format_lenient>true</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2737,411 +2920,42 @@
     <fields>
       <field>
         <name>Rk</name>
-        <rename/>
       </field>
       <field>
         <name>Player</name>
-        <rename/>
       </field>
       <field>
         <name>Nation</name>
-        <rename/>
       </field>
       <field>
         <name>Pos</name>
-        <rename/>
       </field>
       <field>
         <name>Squad</name>
-        <rename/>
       </field>
       <field>
         <name>Comp</name>
-        <rename/>
       </field>
       <field>
         <name>Age</name>
-        <rename/>
       </field>
       <field>
         <name>Born</name>
-        <rename/>
       </field>
       <field>
         <name>MP</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Starts</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Min</name>
-        <rename/>
-      </field>
-      <field>
-        <name>90s</name>
-        <rename/>
       </field>
       <field>
         <name>Gls</name>
-        <rename/>
       </field>
       <field>
         <name>Ast</name>
-        <rename/>
-      </field>
-      <field>
-        <name>G+A</name>
-        <rename/>
-      </field>
-      <field>
-        <name>G-PK</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PK</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKatt</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CrdY</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CrdR</name>
-        <rename/>
       </field>
       <field>
         <name>G+A-PK</name>
-        <rename/>
       </field>
       <field>
-        <name>Rk_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Nation_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Pos_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Comp_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Age_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Born_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>MP_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Starts_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Min_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>90s_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>GA</name>
-        <rename/>
-      </field>
-      <field>
-        <name>GA90</name>
-        <rename/>
-      </field>
-      <field>
-        <name>SoTA</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Saves</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Save%</name>
-        <rename/>
-      </field>
-      <field>
-        <name>W</name>
-        <rename/>
-      </field>
-      <field>
-        <name>D</name>
-        <rename/>
-      </field>
-      <field>
-        <name>L</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CS</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CS%</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKatt_stats_keeper</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKA</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKsv</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKm</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Rk_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Nation_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Pos_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Comp_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Age_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Born_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>90s_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Gls_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Sh</name>
-        <rename/>
-      </field>
-      <field>
-        <name>SoT</name>
-        <rename/>
-      </field>
-      <field>
-        <name>SoT%</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Sh/90</name>
-        <rename/>
-      </field>
-      <field>
-        <name>SoT/90</name>
-        <rename/>
-      </field>
-      <field>
-        <name>G/Sh</name>
-        <rename/>
-      </field>
-      <field>
-        <name>G/SoT</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PK_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PKatt_stats_shooting</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Rk_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Nation_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Pos_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Comp_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Age_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Born_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>MP_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Min_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Mn/MP</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Min%</name>
-        <rename/>
-      </field>
-      <field>
-        <name>90s_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Starts_stats_playing_time</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Mn/Start</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Compl</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Subs</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Mn/Sub</name>
-        <rename/>
-      </field>
-      <field>
-        <name>unSub</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PPM</name>
-        <rename/>
-      </field>
-      <field>
-        <name>onG</name>
-        <rename/>
-      </field>
-      <field>
-        <name>onGA</name>
-        <rename/>
-      </field>
-      <field>
-        <name>+/-</name>
-        <rename/>
-      </field>
-      <field>
-        <name>+/-90</name>
-        <rename/>
-      </field>
-      <field>
-        <name>On-Off</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Rk_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Nation_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Pos_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Comp_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Age_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Born_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>90s_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CrdY_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CrdR_stats_misc</name>
-        <rename/>
-      </field>
-      <field>
-        <name>2CrdY</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Fls</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Fld</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Off</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Crs</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Int</name>
-        <rename/>
-      </field>
-      <field>
-        <name>TklW</name>
-        <rename/>
-      </field>
-      <field>
-        <name>OG</name>
-        <rename/>
+        <name>90s</name>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -3154,13 +2968,55 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>608</xloc>
-      <yloc>96</yloc>
+      <xloc>624</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort rows</name>
+    <name>sort by player id 2</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>player_id</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sorty by player name</name>
     <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -3179,7 +3035,7 @@
     <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>Player</name>
+        <name>full_name</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <collator_enabled>N</collator_enabled>
@@ -3196,14 +3052,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>608</xloc>
-      <yloc>176</yloc>
+      <xloc>480</xloc>
+      <yloc>640</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>build_full_name</name>
-    <type>ScriptValueMod</type>
+    <name>sorty by position</name>
+    <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -3212,26 +3068,21 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>//Script qua
-var full_name = first_name + ' ' + last_name;
-
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>full_name</name>
-        <rename>full_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <name>position</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
     </fields>
     <attributes/>
@@ -3243,8 +3094,391 @@ var full_name = first_name + ' ' + last_name;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
-      <yloc>352</yloc>
+      <xloc>400</xloc>
+      <yloc>448</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>the moneyball target task</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Table output</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>market_value_in_eur</leftvalue>
+            <function>&lt;</function>
+            <rightvalue>median_value</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>G+A-PK</leftvalue>
+            <function>&gt;=</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>Number</type>
+              <text>0.5</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask>####0.0#########;-####0.0#########</mask>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>928</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>transfermarkt_players</name>
+    <type>CsvInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <filename>/home/antonio_dev/projects/market_intelligence/datasources/Transfermarkt/players.csv</filename>
+    <filename_field/>
+    <rownum_field/>
+    <include_filename>N</include_filename>
+    <separator>,</separator>
+    <enclosure>"</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>Y</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <format>mixed</format>
+    <encoding/>
+    <fields>
+      <field>
+        <name>player_id</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>first_name</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>10</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>last_name</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>14</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>name</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>21</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>last_season</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>current_club_id</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>player_code</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>21</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>country_of_birth</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>18</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>city_of_birth</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>25</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>country_of_citizenship</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>date_of_birth</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>sub_position</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>18</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>position</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>10</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>foot</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>5</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>height_in_cm</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>contract_expiration_date</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>agent_name</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>20</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>image_url</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>88</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>international_caps</name>
+        <type>Boolean</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>international_goals</name>
+        <type>Boolean</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>current_national_team_id</name>
+        <type>Boolean</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>url</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>72</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>current_club_domestic_competition_id</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>4</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>current_club_name</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>65</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>market_value_in_eur</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>highest_market_value_in_eur</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
